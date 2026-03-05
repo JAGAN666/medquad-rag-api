@@ -5,11 +5,14 @@ All answers come verbatim from the MedQuAD XML dataset (no LLM hallucination).
 """
 import os
 import time
+from pathlib import Path
 from typing import Annotated
 from contextlib import asynccontextmanager
 
 import qdrant_client
 from fastapi import FastAPI, Query, HTTPException
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from llama_index.core import VectorStoreIndex, Settings
@@ -95,14 +98,10 @@ class QueryResponse(BaseModel):
 
 
 # ── Endpoints ────────────────────────────────────────────────────────────────
-@app.get("/")
-def root() -> dict:
-    return {
-        "service": "MedQuAD RAG API",
-        "status": "running",
-        "docs": "/docs",
-        "query_endpoint": "/query?q=your+medical+question"
-    }
+@app.get("/", response_class=HTMLResponse)
+def root():
+    index = Path(__file__).parent / "static" / "index.html"
+    return HTMLResponse(content=index.read_text())
 
 
 @app.get("/health")

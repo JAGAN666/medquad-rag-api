@@ -11,3 +11,4 @@ arize-phoenix==13.8.0
 arize-phoenix-otel==0.15.0
 openinference-instrumentation-llama-index==4.3.9
 langsmith==0.7.12
+fastembed==0.5.1
